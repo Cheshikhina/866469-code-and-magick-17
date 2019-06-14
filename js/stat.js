@@ -9,6 +9,7 @@ var GAP = 10;
 var INDENT = 40;
 var BAR_WIDTH = 50;
 var BAR_HEIGHT = 150;
+var TEXT_X = CLOUD_X + INDENT;
 var TEXT_Y = CLOUD_HEIGHT - GAP * 1.5;
 var BAR_Y = CLOUD_HEIGHT - GAP * 2.5;
 
@@ -43,14 +44,21 @@ window.renderStatistics = function (ctx, NAMES, times) {
   ctx.fillStyle = '#000';
   ctx.font = '16px PT Mono';
   ctx.textBaseline = 'hanging';
-  ctx.fillText('Ура вы победили!', CLOUD_X + INDENT, CLOUD_Y + GAP * 2);
-  ctx.fillText('Список результатов:', CLOUD_X + INDENT, CLOUD_Y + GAP * 4);
+  ctx.fillText('Ура вы победили!', TEXT_X, CLOUD_Y + GAP * 2);
+  ctx.fillText('Список результатов:', TEXT_X, CLOUD_Y + GAP * 4);
 
   var maxTime = getMaxElement(times);
 
   for (var i = 0; i < NAMES.length; i++) {
-    ctx.fillText(NAMES[i], CLOUD_X + GAP * 3 + (INDENT + BAR_WIDTH) * i, TEXT_Y);
-    ctx.fillText(times[i], CLOUD_X + GAP * 3 + (INDENT + BAR_WIDTH) * i, CLOUD_HEIGHT - GAP * 4.5 - ((BAR_HEIGHT * times[i]) - ((BAR_HEIGHT * times[i]) % maxTime)) / maxTime);
-    ctx.fillRect(CLOUD_X + GAP * 3 + (INDENT + BAR_WIDTH) * i, BAR_Y, BAR_WIDTH, (-(BAR_HEIGHT * times[i]) / maxTime));
+    var columnSpaceX = CLOUD_X + GAP * 3 + (INDENT + BAR_WIDTH) * i;
+    var columnSpaceY = BAR_HEIGHT * times[i] / maxTime;
+
+    ctx.fillStyle = '#000';
+    ctx.fillText(NAMES[i], columnSpaceX, TEXT_Y);
+    ctx.fillText(Math.round(times[i]), columnSpaceX, CLOUD_HEIGHT - GAP * 4.5 - columnSpaceY);
+
+    ctx.fillStyle = (NAMES[i] !== 'Вы') ? 'rgba(0, 0, 255,' + Math.random() + ')' : 'rgba(255, 0, 0, 1)';
+
+    ctx.fillRect(columnSpaceX, BAR_Y, BAR_WIDTH, -columnSpaceY);
   }
 };
