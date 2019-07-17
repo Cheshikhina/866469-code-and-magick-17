@@ -15,9 +15,9 @@
     var wizards = [];
     for (var i = 0; i < WIZARDS_ITEM; i++) {
       wizards.push({
-        name: window.util.getRandomNameOfWizard(),
-        coatColor: window.util.getRandomCoatOfWizard(),
-        eyesColor: window.util.getRandomEyesOfWizard(),
+        name: window.util.WizardParams.NAMES[window.util.getRandomInt(0, window.util.WizardParams.NAMES.length)] + ' ' + window.util.WizardParams.SURNAMES[window.util.getRandomInt(0, window.util.WizardParams.SURNAMES.length)],
+        coatColor: window.util.WizardParams.COAT_COLOR[window.util.getRandomInt(0, window.util.WizardParams.COAT_COLOR.length)],
+        eyesColor: window.util.WizardParams.EYES_COLOR[window.util.getRandomInt(0, window.util.WizardParams.EYES_COLOR.length)],
       });
     }
 
@@ -47,4 +47,6 @@
 
   renderWizards();
   userDialog.querySelector('.setup-similar').classList.remove('hidden');
+
+
 })();

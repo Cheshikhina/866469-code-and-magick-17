@@ -12,10 +12,10 @@
   var userWizardCoatValue = document.querySelector('input[name="coat-color"]');
   var userWizardEyesValue = document.querySelector('input[name="eyes-color"]');
   var userWizardFireballValue = document.querySelector('input[name="fireball-color"]');
-  var dialogHandle = userDialog.querySelector('.upload');
+  var dialogHandler = userDialog.querySelector('.upload');
   var shopElement = document.querySelector('.setup-artifacts-shop');
-  var draggedItem = null;
   var artifactsElement = document.querySelector('.setup-artifacts');
+  var draggedItem = null;
 
   var setupCloseEscHandler = function (evt) {
     window.util.isEscEvent(evt, closeSetup);
@@ -37,7 +37,6 @@
     userWizardFireball.style.backgroundColor = userWizardFireballValue.value;
     userDialog.style.top = '';
     userDialog.style.left = '';
-    draggedItem = null;
   };
 
   var closeSetup = function () {
@@ -73,24 +72,24 @@
   });
 
   userWizardCoat.addEventListener('click', function () {
-    var randomColorCoat = window.util.getRandomCoatOfWizard();
+    var randomColorCoat = window.util.WizardParams.COAT_COLOR[window.util.getRandomInt(0, window.util.WizardParams.COAT_COLOR.length)];
     userWizardCoat.style.fill = randomColorCoat;
     userWizardCoatValue.setAttribute('value', randomColorCoat);
   });
 
   userWizardEyes.addEventListener('click', function () {
-    var randomColorEyes = window.util.getRandomEyesOfWizard();
+    var randomColorEyes = window.util.WizardParams.EYES_COLOR[window.util.getRandomInt(0, window.util.WizardParams.EYES_COLOR.length)];
     userWizardEyes.style.fill = randomColorEyes;
     userWizardEyesValue.setAttribute('value', randomColorEyes);
   });
 
   userWizardFireball.addEventListener('click', function () {
-    var randomColorFireball = window.util.getRandomFireballOfWizard();
+    var randomColorFireball = window.util.WizardParams.FIREBALL_COLOR[window.util.getRandomInt(0, window.util.WizardParams.FIREBALL_COLOR.length)];
     userWizardFireball.style.backgroundColor = randomColorFireball;
     userWizardFireballValue.setAttribute('value', randomColorFireball);
   });
 
-  dialogHandle.addEventListener('mousedown', function (evt) {
+  dialogHandler.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
     var startCoords = {
@@ -98,8 +97,11 @@
       y: evt.clientY
     };
 
+    var dragged = false;
+
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
+      dragged = true;
 
       var shift = {
         x: startCoords.x - moveEvt.clientX,
@@ -120,6 +122,15 @@
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
+
+      if (dragged) {
+        var onClickPreventDefault = function (evt) {
+          evt.preventDefault();
+          dialogHandler.removeEventListener('click', onClickPreventDefault);
+        };
+        dialogHandler.addEventListener('click', onClickPreventDefault);
+      }
+
     };
 
     document.addEventListener('mousemove', onMouseMove);
