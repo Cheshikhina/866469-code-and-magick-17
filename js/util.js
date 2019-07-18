@@ -14,31 +14,38 @@ window.util = (function () {
     FIREBALL_COLOR: ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'],
   };
 
+  var isEscEvent = function (evt, action) {
+    if (evt.keyCode === KeyCode.ESC) {
+      action();
+    }
+  };
+
+  var isEnterEvent = function (evt, action) {
+    if (evt.keyCode === KeyCode.ENTER) {
+      action();
+    }
+  };
+
+  var getRandomInt = function (min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+  };
+
   return {
-    isEscEvent: function (evt, action) {
-      if (evt.keyCode === KeyCode.ESC) {
-        action();
-      }
-    },
-    isEnterEvent: function (evt, action) {
-      if (evt.keyCode === KeyCode.ENTER) {
-        action();
-      }
-    },
-    getRandomInt: function (min, max) {
-      return Math.floor(Math.random() * (max - min)) + min;
-    },
-    getRandomNameOfWizard: function () {
-      return WizardParams.NAMES[window.util.getRandomInt(0, WizardParams.NAMES.length)] + ' ' + WizardParams.SURNAMES[window.util.getRandomInt(0, WizardParams.SURNAMES.length)];
-    },
-    getRandomCoatOfWizard: function () {
-      return WizardParams.COAT_COLOR[window.util.getRandomInt(0, WizardParams.COAT_COLOR.length)];
-    },
-    getRandomEyesOfWizard: function () {
-      return WizardParams.EYES_COLOR[window.util.getRandomInt(0, WizardParams.EYES_COLOR.length)];
-    },
-    getRandomFireballOfWizard: function () {
-      return WizardParams.FIREBALL_COLOR[window.util.getRandomInt(0, WizardParams.FIREBALL_COLOR.length)];
-    },
+    WizardParams: WizardParams,
+    getRandomInt: getRandomInt,
+    isEnterEvent: isEnterEvent,
+    isEscEvent: isEscEvent,
+    // getRandomNameOfWizard: function () {
+    //   return WizardParams.NAMES[window.util.getRandomInt(0, WizardParams.NAMES.length)] + ' ' + WizardParams.SURNAMES[window.util.getRandomInt(0, WizardParams.SURNAMES.length)];
+    // },
+    // getRandomCoatOfWizard: function () {
+    //   return WizardParams.COAT_COLOR[window.util.getRandomInt(0, WizardParams.COAT_COLOR.length)];
+    // },
+    // getRandomEyesOfWizard: function () {
+    //   return WizardParams.EYES_COLOR[window.util.getRandomInt(0, WizardParams.EYES_COLOR.length)];
+    // },
+    // getRandomFireballOfWizard: function () {
+    //   return WizardParams.FIREBALL_COLOR[window.util.getRandomInt(0, WizardParams.FIREBALL_COLOR.length)];
+    // },
   };
 })();
