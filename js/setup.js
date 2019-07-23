@@ -3,6 +3,9 @@
 (function () {
   var WIZARDS_ITEM = 4;
   var userDialog = document.querySelector('.setup');
+  var form = userDialog.querySelector('.setup-wizard-form');
+  // var button = userDialog.querySelector('.setup-submit');
+  // var message = 'Данные волшебника загружаются в базу волшебников :P';
 
   document.querySelector('.setup-similar').classList.remove('hidden');
 
@@ -11,42 +14,47 @@
     .content
     .querySelector('.setup-similar-item');
 
-  var getData = function () {
-    var wizards = [];
-    for (var i = 0; i < WIZARDS_ITEM; i++) {
-      wizards.push({
-        name: window.util.WizardParams.NAMES[window.util.getRandomInt(0, window.util.WizardParams.NAMES.length)] + ' ' + window.util.WizardParams.SURNAMES[window.util.getRandomInt(0, window.util.WizardParams.SURNAMES.length)],
-        coatColor: window.util.WizardParams.COAT_COLOR[window.util.getRandomInt(0, window.util.WizardParams.COAT_COLOR.length)],
-        eyesColor: window.util.WizardParams.EYES_COLOR[window.util.getRandomInt(0, window.util.WizardParams.EYES_COLOR.length)],
-      });
-    }
-
-    return wizards;
-  };
-
   var renderWizard = function (wizard) {
     var wizardElement = similarWizardTemplate.cloneNode(true);
 
     wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-    wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
-    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
+    wizardElement.querySelector('.wizard-coat').style.fill = wizard.colorCoat;
+    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.colorEyes;
 
     return wizardElement;
   };
 
-  var renderWizards = function () {
-    var fragment = document.createDocumentFragment();
-    var wizardsData = getData();
-
-    for (var i = 0; i < wizardsData.length; i++) {
-      fragment.appendChild(renderWizard(wizardsData[i]));
-    }
-
-    similarListElement.appendChild(fragment);
-  };
-
-  renderWizards();
   userDialog.querySelector('.setup-similar').classList.remove('hidden');
 
+  var successHandler = function (wizards) {
+    var fragment = document.createDocumentFragment();
 
+    for (var i = 0; i < WIZARDS_ITEM; i++) {
+      fragment.appendChild(renderWizard(wizards[i]));
+    }
+    similarListElement.appendChild(fragment);
+
+    userDialog.querySelector('.setup-similar').classList.remove('hidden');
+  };
+
+  var errorHandler = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
+  form.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(form), successHandler, errorHandler);
+    userDialog.classList.add('hidden');
+    window.util.closeSetup();
+    evt.preventDefault();
+  });
+
+  window.backend.load(successHandler, errorHandler);
 })();

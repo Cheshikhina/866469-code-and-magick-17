@@ -1,6 +1,11 @@
 'use strict';
 
 window.util = (function () {
+  var userDialog = document.querySelector('.setup');
+  var form = userDialog.querySelector('.setup-wizard-form');
+  var userWizardCoatValue = document.querySelector('input[name="coat-color"]');
+  var userWizardEyesValue = document.querySelector('input[name="eyes-color"]');
+  var userWizardFireballValue = document.querySelector('input[name="fireball-color"]');
   var KeyCode = {
     ESC: 27,
     ENTER: 13,
@@ -26,6 +31,23 @@ window.util = (function () {
     }
   };
 
+  var removeCloseEsc = function () {
+    document.removeEventListener('keydown', setupCloseEscHandler);
+  };
+
+  var setupCloseEscHandler = function (evt) {
+    isEscEvent(evt, closeSetup);
+  };
+
+  var closeSetup = function () {
+    userWizardCoatValue.value = 'rgb(101, 137, 164)';
+    userWizardEyesValue.value = '';
+    userWizardFireballValue.value = '';
+    form.reset();
+    userDialog.classList.add('hidden');
+    removeCloseEsc();
+  };
+
   var getRandomInt = function (min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
   };
@@ -34,18 +56,8 @@ window.util = (function () {
     WizardParams: WizardParams,
     getRandomInt: getRandomInt,
     isEnterEvent: isEnterEvent,
-    isEscEvent: isEscEvent,
-    // getRandomNameOfWizard: function () {
-    //   return WizardParams.NAMES[window.util.getRandomInt(0, WizardParams.NAMES.length)] + ' ' + WizardParams.SURNAMES[window.util.getRandomInt(0, WizardParams.SURNAMES.length)];
-    // },
-    // getRandomCoatOfWizard: function () {
-    //   return WizardParams.COAT_COLOR[window.util.getRandomInt(0, WizardParams.COAT_COLOR.length)];
-    // },
-    // getRandomEyesOfWizard: function () {
-    //   return WizardParams.EYES_COLOR[window.util.getRandomInt(0, WizardParams.EYES_COLOR.length)];
-    // },
-    // getRandomFireballOfWizard: function () {
-    //   return WizardParams.FIREBALL_COLOR[window.util.getRandomInt(0, WizardParams.FIREBALL_COLOR.length)];
-    // },
+    setupCloseEscHandler: setupCloseEscHandler,
+    closeSetup: closeSetup,
+    removeCloseEsc: removeCloseEsc,
   };
 })();

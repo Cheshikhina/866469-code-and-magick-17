@@ -15,18 +15,15 @@
   var dialogHandler = userDialog.querySelector('.upload');
   var shopElement = document.querySelector('.setup-artifacts-shop');
   var artifactsElement = document.querySelector('.setup-artifacts');
+  // var form = userDialog.querySelector('.setup-wizard-form');
   var draggedItem = null;
 
-  var setupCloseEscHandler = function (evt) {
-    window.util.isEscEvent(evt, closeSetup);
-  };
+  // var setupCloseEscHandler = function (evt) {
+  //   window.util.isEscEvent(evt, closeSetup);
+  // };
 
   var addCloseEsc = function () {
-    document.addEventListener('keydown', setupCloseEscHandler);
-  };
-
-  var removeCloseEsc = function () {
-    document.removeEventListener('keydown', setupCloseEscHandler);
+    document.addEventListener('keydown', window.util.setupCloseEscHandler);
   };
 
   var openSetup = function () {
@@ -39,13 +36,14 @@
     userDialog.style.left = '';
   };
 
-  var closeSetup = function () {
-    userWizardCoatValue.value = 'rgb(101, 137, 164)';
-    userWizardEyesValue.value = '';
-    userWizardFireballValue.value = '';
-    userDialog.classList.add('hidden');
-    removeCloseEsc();
-  };
+  // var closeSetup = function () {
+  //   userWizardCoatValue.value = 'rgb(101, 137, 164)';
+  //   userWizardEyesValue.value = '';
+  //   userWizardFireballValue.value = '';
+  //   form.reset();
+  //   userDialog.classList.add('hidden');
+  //   removeCloseEsc();
+  // };
 
   setupOpen.addEventListener('click', function () {
     openSetup();
@@ -56,15 +54,15 @@
   });
 
   setupClose.addEventListener('click', function () {
-    closeSetup();
+    window.util.closeSetup();
   });
 
   setupClose.addEventListener('keydown', function (evt) {
-    window.util.isEnterEvent(evt, closeSetup);
+    window.util.isEnterEvent(evt, window.util.closeSetup);
   });
 
   userName.addEventListener('focus', function () {
-    removeCloseEsc();
+    window.util.removeCloseEsc();
   });
 
   userName.addEventListener('blur', function () {
